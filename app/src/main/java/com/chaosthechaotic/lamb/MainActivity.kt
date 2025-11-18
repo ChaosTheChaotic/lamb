@@ -13,11 +13,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val intent = Intent(this, CrocPollFgServ::class.java)
-        startForegroundService(intent)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val intent = Intent(this, CrocPollFgServ::class.java)
+        startForegroundService(intent)
 
         // Example of a call to a native method
         binding.sampleText.text = stringFromJNI()

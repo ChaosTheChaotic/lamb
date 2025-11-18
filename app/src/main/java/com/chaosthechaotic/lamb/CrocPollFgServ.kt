@@ -41,13 +41,18 @@ class CrocPollFgServ : Service() {
         handler.removeCallbacks(pollRunnable)
     }
     private fun createNotifChannel() {
-        val servC = NotificationChannel(
-            "proc_poll_channel",
-            "Croc Polling Service Channel",
-            NotificationManager.IMPORTANCE_DEFAULT,
-        ).apply { description = "Channel for polling croc" }
+        // Check if channel already exists
         val man = getSystemService(NotificationManager::class.java)
-        man.createNotificationChannel(servC)
+        if (man.getNotificationChannel("croc_poll_channel") == null) {
+            val servC = NotificationChannel(
+                "croc_poll_channel",
+                "Croc Polling Service Channel",
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = "Channel for polling croc"
+            }
+            man.createNotificationChannel(servC)
+        }
     }
     private fun pollCroc() {}
 }

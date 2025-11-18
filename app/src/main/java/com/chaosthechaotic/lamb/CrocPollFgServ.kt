@@ -23,7 +23,7 @@ class CrocPollFgServ : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         isRunning = true
         val notif = NotificationCompat.Builder(this, "croc_poll_channel").setContentTitle("Lamb is polling").setContentText("Lamb is polling croc for updates").build()
-        startForeground(startId, notif)
+        startForeground(1, notif)
         handler.post(pollRunnable)
         return START_STICKY
     }

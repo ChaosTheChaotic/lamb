@@ -1,6 +1,7 @@
 package com.chaosthechaotic.lamb
 
-import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.os.Handler
@@ -20,9 +21,15 @@ class CrocPollFgServ : Service() {
             }
         }
     }
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotifChannel()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         isRunning = true
-        val notif = NotificationCompat.Builder(this, "croc_poll_channel").setContentTitle("Lamb is polling").setContentText("Lamb is polling croc for updates").build()
+        val notif = NotificationCompat.Builder(this, "croc_poll_channel").setContentTitle("Lamb is polling").setContentText("Lamb is polling croc for updates").setSmallIcon(R.mipmap.ic_launcher).build()
         startForeground(1, notif)
         handler.post(pollRunnable)
         return START_STICKY
@@ -32,6 +39,15 @@ class CrocPollFgServ : Service() {
         super.onDestroy()
         isRunning = false
         handler.removeCallbacks(pollRunnable)
+    }
+    private fun createNotifChannel() {
+        val servC = NotificationChannel(
+            "proc_poll_channel",
+            "Croc Polling Service Channel",
+            NotificationManager.IMPORTANCE_DEFAULT,
+        ).apply { description = "Channel for polling croc" }
+        val man = getSystemService(NotificationManager::class.java)
+        man.createNotificationChannel(servC)
     }
     private fun pollCroc() {}
 }

@@ -1,16 +1,16 @@
 package com.chaosthechaotic.lamb
 
-import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.PermissionChecker
 import kotlinx.coroutines.Runnable
 
 class CrocPollFgServ : Service() {
@@ -30,9 +30,10 @@ class CrocPollFgServ : Service() {
         createNotifChannel()
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         isRunning = true
-        val notif = NotificationCompat.Builder(this, "croc_poll_channel").setContentTitle("Lamb is polling").setContentText("Lamb is polling croc for updates").setSmallIcon(R.mipmap.ic_launcher).build()
+        val notif = NotificationCompat.Builder(this, "croc_poll_channel").setContentTitle("Lamb is polling").setContentText("Lamb is polling croc for updates").setSmallIcon(R.mipmap.ic_launcher).setOngoing(true).build()
         startForeground(1, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
         handler.post(pollRunnable)
         return START_STICKY
@@ -50,19 +51,12 @@ class CrocPollFgServ : Service() {
             val servC = NotificationChannel(
                 "croc_poll_channel",
                 "Croc Polling Service Channel",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "Channel for polling croc"
             }
             man.createNotificationChannel(servC)
         }
     }
-    private fun pollCroc() {
-        val netPerm = PermissionChecker.checkSelfPermission(this, Manifest.permission.INTERNET)
-        val acnetPerm = PermissionChecker.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
-        if (netPerm != PermissionChecker.PERMISSION_GRANTED && acnetPerm != PermissionChecker.PERMISSION_GRANTED) {
-            stopSelf()
-            return
-        }
-    }
+    private fun pollCroc() {}
 }

@@ -11,6 +11,13 @@ cmake_minimum_required(VERSION 3.22.1)
 # build script scope).
 project("lamb")
 
+# Import prebuilt libcroco as a shared library
+add_library(croco SHARED IMPORTED)
+
+# Set the path to the prebuilt library based on the current ABI
+set_target_properties(croco PROPERTIES
+        IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libs/${ANDROID_ABI}/libcroco.so)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -34,4 +41,6 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
 target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
         android
-        log)
+        log
+        croco
+)

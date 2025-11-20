@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         // Used to load the 'lamb' library on application startup.
         init {
-            System.loadLibrary("croco")
             System.loadLibrary("lamb")
         }
     }

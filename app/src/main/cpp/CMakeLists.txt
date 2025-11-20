@@ -11,9 +11,7 @@ cmake_minimum_required(VERSION 3.22.1)
 # build script scope).
 project("lamb")
 
-add_library(croco SHARED IMPORTED)
-
-set_target_properties(croco PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libcroco.so)
+link_directories(${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI})
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.

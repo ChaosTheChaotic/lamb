@@ -58,5 +58,10 @@ class CrocPollFgServ : Service() {
             man.createNotificationChannel(servC)
         }
     }
-    private fun pollCroc() {}
+
+    external fun recvCroc(code: String): String
+
+    private fun pollCroc() {
+        recvCroc("defaultCodeWow")
+    }
 }

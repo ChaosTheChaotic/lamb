@@ -2,6 +2,18 @@
 #include <string>
 #include "libcrocou.h"
 
+char* jstrToChar(jstring str, JNIEnv* env) {
+    const char* strI = env->GetStringUTFChars(str, nullptr);
+    char* rtstr = new char[strlen(strI) + 1];
+    strcpy(rtstr, strI);
+    return rtstr;
+}
+
+jstring charToJstring(char* str, JNIEnv *env) {
+    std::string s = str;
+    return env->NewStringUTF(s.c_str());
+}
+
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_chaosthechaotic_lamb_MainActivity_stringFromJNI(
         JNIEnv* env,
@@ -16,10 +28,14 @@ Java_com_chaosthechaotic_lamb_CrocPollFgServ_recvCroc(
         jobject /* this */,
         jstring code
         ) {
-    const char* codeStrI = env->GetStringUTFChars(code, nullptr);
-    char* codeStr = new char[strlen(codeStrI) + 1];
-    strcpy(codeStr, codeStrI);
-    const char* resultI = RecvText(codeStr);
-    std::string res = resultI;
-    return env->NewStringUTF(res.c_str());
+    return charToJstring(RecvText(jstrToChar(code, env)), env);
+}
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_chaosthechaotic_lamb_CrocPollFgServ_sndCroc(
+        JNIEnv* env,
+        jobject /* this */,
+        jstring msg,
+        jstring code) {
+    return charToJstring(SendText(jstrToChar(msg, env), jstrToChar(code, env)), env);
 }

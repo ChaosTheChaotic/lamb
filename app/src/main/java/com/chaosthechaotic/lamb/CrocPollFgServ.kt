@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.Runnable
@@ -60,8 +61,10 @@ class CrocPollFgServ : Service() {
     }
 
     external fun recvCroc(code: String): String
+    external fun sndCroc(msg: String, code: String): String
 
     private fun pollCroc() {
-        recvCroc("defaultCodeWow")
+        val res = recvCroc("defaultCodeWow")
+        Log.d("CrocPoller", res)
     }
 }

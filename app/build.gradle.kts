@@ -52,8 +52,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
 
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
-    implementation("com.google.crypto.tink:tink-android:1.10.0")
+    implementation("androidx.security:security-crypto:1.1.0")
+    implementation("com.google.crypto.tink:tink-android:1.19.0")
+    implementation(libs.androidx.material3)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

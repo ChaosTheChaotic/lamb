@@ -39,3 +39,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         log
         croco
 )
+
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)

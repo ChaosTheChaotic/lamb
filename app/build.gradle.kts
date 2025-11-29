@@ -57,10 +57,11 @@ dependencies {
     implementation("com.google.crypto.tink:tink-android:1.19.0")
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material.icons.extended)
 
     val composeBom = platform("androidx.compose:compose-bom:2025.10.01")
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
+    implementation("androidx.compose:compose-bom:2025.11.01")
+    androidTestImplementation("androidx.compose:compose-bom:2025.11.01")
 
     implementation("androidx.compose.material3:material3")
     // Android Studio Preview support

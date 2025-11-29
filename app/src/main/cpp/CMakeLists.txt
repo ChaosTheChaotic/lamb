@@ -29,7 +29,7 @@ link_directories(${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI})
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         native-lib.cpp
-        lambproto.cpp)
+        lambproto.c)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this

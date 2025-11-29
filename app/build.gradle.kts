@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -42,7 +43,7 @@ android {
         }
     }
     buildFeatures {
-        viewBinding = true
+	compose = true
     }
 }
 
@@ -55,6 +56,20 @@ dependencies {
     implementation("androidx.security:security-crypto:1.1.0")
     implementation("com.google.crypto.tink:tink-android:1.19.0")
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose)
+
+    val composeBom = platform("androidx.compose:compose-bom:2025.10.01")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation("androidx.compose.material3:material3")
+    // Android Studio Preview support
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    // UI Tests
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

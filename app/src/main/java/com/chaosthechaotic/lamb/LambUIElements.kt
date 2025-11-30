@@ -1,13 +1,18 @@
 package com.chaosthechaotic.lamb
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,9 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 
 interface LambUIElements {
     @Composable
@@ -41,24 +50,68 @@ interface LambUIElements {
     }
 
     @Composable
-    fun PasswordInput(value: String, label: String?, onValueChange: (String) -> Unit) {
+    fun PasswordInput(value: String, label: String?, onValueChange: (String) -> Unit, validatePassword: ((String) -> String?)?) {
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
+        var errMsg by rememberSaveable { mutableStateOf<String?>(null) }
 
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            label = { Text(label ?: "Password") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            trailingIcon = {
-                val img = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                val desc = if (passwordVisible) "Hide password" else "Show password"
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box (
+                modifier = Modifier.align(Alignment.TopStart)
+            ) {
+                OutlinedTextField(
+                    value = value,
+                    onValueChange = {
+                        if (validatePassword == null) {
+                            onValueChange(it)
+                        } else {
+                            errMsg = validatePassword(it)
+                            if (errMsg == null) {
+                                onValueChange(it)
+                            }
+                        }
+                    },
+                    label = { Text(label ?: "Password") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val img =
+                            if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val desc = if (passwordVisible) "Hide password" else "Show password"
 
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = img, contentDescription = desc)
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(imageVector = img, contentDescription = desc)
+                        }
+                    },
+                    isError = errMsg != null,
+                )
+            }
+            if (errMsg != null) {
+                Box(
+                    modifier = Modifier.align(Alignment.BottomStart)
+                ) {
+                    Box(
+                        modifier = Modifier.align(Alignment.TopStart)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Error,
+                            contentDescription = null,
+                            tint = Color.Red,
+                        )
+                    }
+                    Box(
+                        modifier = Modifier.align(Alignment.TopStart).padding(8.dp)
+                    ) {
+                        Text(
+                            text = errMsg!!,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
                 }
-            },
-        )
+            }
+        }
     }
 }

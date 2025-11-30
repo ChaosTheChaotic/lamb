@@ -51,7 +51,7 @@ interface LambScreens : LambUIElements {
             Box(
                 modifier = Modifier.align(Alignment.CenterEnd)
             ) {
-                PasswordInput("Placeholder", "Croc receive password (must match computer password)") {}
+                PasswordInput("Placeholder", "Croc receive password (must match computer password)") {} // TODO: Make this use the secret service correctly
             }
         }
     }

@@ -15,6 +15,7 @@ import kotlinx.coroutines.Runnable
 class CrocPollFgServ : Service() {
     private val handler = Handler(Looper.getMainLooper())
     private var isRunning = false
+    private lateinit var lambSS: LambSS
     private val pollRunnable = object : Runnable {
         override fun run() {
             pollCroc() // TODO: Implement
@@ -27,6 +28,7 @@ class CrocPollFgServ : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotifChannel()
+        lambSS = LambSS(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -61,7 +63,16 @@ class CrocPollFgServ : Service() {
     external fun sndCroc(msg: String, code: String): String
 
     private fun pollCroc() {
-        val res = recvCroc("defaultCodeWow")
-        Log.d("CrocPoller", res)
+        try {
+            val stored = lambSS.decryptPwd()
+            if (stored != null) {
+                val res = recvCroc(stored)
+                Log.d("CrocPoller", "Result with password: $stored: $res")
+            } else {
+                Log.d("CrocPoller", "No password found")
+            }
+        } catch (e: Exception) {
+            Log.e("crocPoller", "Error polling: ${e.message}", e)
+        }
     }
 }

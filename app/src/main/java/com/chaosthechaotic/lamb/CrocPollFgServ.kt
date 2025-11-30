@@ -18,7 +18,7 @@ class CrocPollFgServ : Service() {
     private lateinit var lambSS: LambSS
     private val pollRunnable = object : Runnable {
         override fun run() {
-            pollCroc() // TODO: Implement
+            pollCroc()
             if (isRunning) {
                 handler.postDelayed(this, 5000)
             }

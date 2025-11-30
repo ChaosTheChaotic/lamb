@@ -3,8 +3,15 @@ package com.chaosthechaotic.lamb
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,6 +47,16 @@ interface LambScreens : LambUIElements {
 
     @Composable
     fun SettingsScreen(navCont: NavController) {
+        val ctx = LocalContext.current
+        val lambSS = remember { LambSS(ctx) }
+        var pwd by rememberSaveable { mutableStateOf("") }
+        var storedPwd by remember { mutableStateOf<String?>(null) }
+
+        LaunchedEffect(Unit) {
+            storedPwd = lambSS.decryptPwd()
+            pwd = storedPwd ?: ""
+        }
+
         Box(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -51,7 +68,23 @@ interface LambScreens : LambUIElements {
             Box(
                 modifier = Modifier.align(Alignment.CenterEnd)
             ) {
-                PasswordInput("Placeholder", "Croc receive password (must match computer password)") {} // TODO: Make this use the secret service correctly
+                PasswordInput(
+                    value = pwd,
+                    label = "Croc password (must match password set on computer)",
+                    onValueChange = { newPass ->
+                        pwd = newPass
+                        if (newPass.length > 6) {
+                            lambSS.encryptStore(newPass)
+                        }
+                    },
+                    validatePassword = {pwd ->
+                        when {
+                            pwd.isEmpty() -> null
+                            pwd.length <= 6 -> "Password must be greater than 6 characters"
+                            else -> null
+                        }
+                    }
+                )
             }
         }
     }

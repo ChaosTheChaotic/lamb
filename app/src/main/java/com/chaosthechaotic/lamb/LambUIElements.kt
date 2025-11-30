@@ -62,15 +62,9 @@ interface LambUIElements {
             ) {
                 OutlinedTextField(
                     value = value,
-                    onValueChange = {
-                        if (validatePassword == null) {
-                            onValueChange(it)
-                        } else {
-                            errMsg = validatePassword(it)
-                            if (errMsg == null) {
-                                onValueChange(it)
-                            }
-                        }
+                    onValueChange = { newValue: String ->
+                        onValueChange(newValue)
+                        errMsg = validatePassword?.invoke(newValue)
                     },
                     label = { Text(label ?: "Password") },
                     singleLine = true,

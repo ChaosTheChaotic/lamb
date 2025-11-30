@@ -10,6 +10,7 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
+import androidx.core.content.edit
 
 class LambSS(context: Context) {
     private val shprfs = context.getSharedPreferences("secure_prefs", Context.MODE_PRIVATE)
@@ -49,7 +50,7 @@ class LambSS(context: Context) {
         val enc = cipher.doFinal(pwd.toByteArray(StandardCharsets.UTF_8))
 
         val comb = cipher.iv + enc
-        shprfs.edit().putString(EKEY, Base64.encodeToString(comb, Base64.DEFAULT)).apply()
+        shprfs.edit { putString(EKEY, Base64.encodeToString(comb, Base64.DEFAULT)) }
     }
 
     fun decryptPwd(): String? {

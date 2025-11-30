@@ -72,7 +72,7 @@ class CrocPollFgServ : Service() {
                 Log.d("CrocPoller", "No password found")
             }
         } catch (e: Exception) {
-            Log.e("crocPoller", "Error polling: ${e.message}", e)
+            Log.e("CrocPoller", "Error polling: ${e.message}", e)
         }
     }
 }

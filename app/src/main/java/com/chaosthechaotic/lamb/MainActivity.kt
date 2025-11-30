@@ -21,8 +21,10 @@ class MainActivity : AppCompatActivity(), LambScreens {
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
         }
 
-        val intent = Intent(this, CrocPollFgServ::class.java)
-        startForegroundService(intent)
+        if (LambDataStore.pollCroc.getValBlocking(this)) {
+            val intent = Intent(this, CrocPollFgServ::class.java)
+            startForegroundService(intent)
+        }
 
         setContent {
             AppNav()

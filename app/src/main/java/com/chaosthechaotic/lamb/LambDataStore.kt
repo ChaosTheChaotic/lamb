@@ -13,7 +13,7 @@ val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(name =
 
 object LambDataStore {
 
-    class PrefItem<T>(private val key: Preferences.Key<T>, val default: T) {
+    class PrefItem<T>(val key: Preferences.Key<T>, val default: T) {
         fun getVal(context: Context): Flow<T> {
             return context.userDataStore.data.map { preferences -> preferences[key] ?: default }
         }

@@ -1,5 +1,6 @@
 package com.chaosthechaotic.lamb
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -94,7 +95,17 @@ interface LambScreens : LambUIElements {
                 SettingsSwitch (
                     value = pollCroc,
                     label = "Poll Croc",
-                    onValueChange = { newValue -> scope.launch { LambDataStore.pollCroc.setVal(ctx, newValue) } }
+                        onValueChange = { newValue -> scope.launch {
+                            LambDataStore.pollCroc.setVal(ctx, newValue)
+
+                            val intent = Intent(ctx, CrocPollFgServ::class.java)
+                            if (newValue) {
+                                ctx.startForegroundService(intent)
+                            } else {
+                                ctx.stopService(intent)
+                            }
+                        }
+                    }
                 )
             }
         }

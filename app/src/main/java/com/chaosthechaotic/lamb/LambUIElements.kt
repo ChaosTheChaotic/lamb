@@ -1,9 +1,14 @@
 package com.chaosthechaotic.lamb
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleLeft
@@ -54,61 +59,58 @@ interface LambUIElements {
     }
 
     @Composable
-    fun PasswordInput(value: String, label: String?, onValueChange: (String) -> Unit, validatePassword: ((String) -> String?)?) {
+    fun PasswordInput(
+        value: String,
+        label: String?,
+        onValueChange: (String) -> Unit,
+        validatePassword: ((String) -> String?)?
+    ) {
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
         var errMsg by rememberSaveable { mutableStateOf<String?>(null) }
 
-        Box(
-            modifier = Modifier.fillMaxSize()
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Box (
-                modifier = Modifier.align(Alignment.TopStart)
-            ) {
-                OutlinedTextField(
-                    value = value,
-                    onValueChange = { newValue: String ->
-                        onValueChange(newValue)
-                        errMsg = validatePassword?.invoke(newValue)
-                    },
-                    label = { Text(label ?: "Password") },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        val img =
-                            if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                        val desc = if (passwordVisible) "Hide password" else "Show password"
+            OutlinedTextField(
+                value = value,
+                onValueChange = { newValue: String ->
+                    onValueChange(newValue)
+                    errMsg = validatePassword?.invoke(newValue)
+                },
+                label = { Text(label ?: "Password") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    val img =
+                        if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    val desc = if (passwordVisible) "Hide password" else "Show password"
 
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(imageVector = img, contentDescription = desc)
-                        }
-                    },
-                    isError = errMsg != null,
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = img, contentDescription = desc)
+                    }
+                },
+                isError = errMsg != null,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+        if (errMsg != null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Error,
+                    contentDescription = null,
+                    tint = Color.Red,
+                    modifier = Modifier.size(16.dp)
                 )
-            }
-            if (errMsg != null) {
-                Box(
-                    modifier = Modifier.align(Alignment.BottomStart)
-                ) {
-                    Box(
-                        modifier = Modifier.align(Alignment.TopStart)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Error,
-                            contentDescription = null,
-                            tint = Color.Red,
-                        )
-                    }
-                    Box(
-                        modifier = Modifier.align(Alignment.TopStart).padding(8.dp)
-                    ) {
-                        Text(
-                            text = errMsg!!,
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                }
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = errMsg!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
         }
     }

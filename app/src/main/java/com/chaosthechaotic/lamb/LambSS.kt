@@ -27,7 +27,7 @@ class LambSS(context: Context) {
             keyGen.init(
                 KeyGenParameterSpec
                     .Builder(
-                        KEY, KeyProperties.PURPOSE_DECRYPT or KeyProperties.PURPOSE_DECRYPT
+                        KEY, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
                     )
                     .setBlockModes(
                         KeyProperties.BLOCK_MODE_GCM

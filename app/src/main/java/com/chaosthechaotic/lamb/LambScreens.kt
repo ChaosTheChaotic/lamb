@@ -1,17 +1,20 @@
 package com.chaosthechaotic.lamb
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,13 +38,9 @@ interface LambScreens : LambUIElements {
     @Composable
     fun HomeScreen(navCont: NavController) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
-            Box(
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                SettingsButton { navCont.navigate("settings_screen") }
-            }
+            SettingsButton {navCont.navigate("settings_screen") }
         }
     }
 
@@ -57,35 +56,29 @@ interface LambScreens : LambUIElements {
             pwd = storedPwd ?: ""
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.Top,
         ) {
-            Box(
-                modifier = Modifier.align(Alignment.TopStart)
-            ) {
-                BackButton { navCont.popBackStack() }
-            }
-            Box(
-                modifier = Modifier.align(Alignment.CenterEnd)
-            ) {
-                PasswordInput(
-                    value = pwd,
-                    label = "Croc password (must match password set on computer)",
-                    onValueChange = { newPass ->
-                        pwd = newPass
-                        if (newPass.isNotEmpty() && newPass.length > 6) {
-                            lambSS.encryptStore(newPass)
-                        }
-                    },
-                    validatePassword = {pwd ->
-                        when {
-                            pwd.isEmpty() -> null
-                            pwd.length <= 6 -> "Password must be greater than 6 characters"
-                            else -> null
-                        }
+            BackButton { navCont.popBackStack() }
+
+            PasswordInput(
+                value = pwd,
+                label = "Croc password (must match computer)",
+                onValueChange = { newPass ->
+                    pwd = newPass
+                    if (newPass.isNotEmpty() && newPass.length > 6) {
+                        lambSS.encryptStore(newPass)
                     }
-                )
-            }
+                },
+                validatePassword = { pwd ->
+                    when {
+                        pwd.isEmpty() -> "Password must not be empty"
+                        pwd.length <= 6 -> "Password must be greater than 6 characters"
+                        else -> null
+                    }
+                }
+            )
         }
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -19,6 +20,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 
 interface LambScreens : LambUIElements {
     @Composable
@@ -62,23 +65,38 @@ interface LambScreens : LambUIElements {
         ) {
             BackButton { navCont.popBackStack() }
 
-            PasswordInput(
-                value = pwd,
-                label = "Croc password (must match computer)",
-                onValueChange = { newPass ->
-                    pwd = newPass
-                    if (newPass.isNotEmpty() && newPass.length > 6) {
-                        lambSS.encryptStore(newPass)
+            Box {
+                PasswordInput(
+                    value = pwd,
+                    label = "Croc password (must match computer)",
+                    onValueChange = { newPass ->
+                        pwd = newPass
+                        if (newPass.isNotEmpty() && newPass.length > 6) {
+                            lambSS.encryptStore(newPass)
+                        }
+                    },
+                    validatePassword = { pwd ->
+                        when {
+                            pwd.isEmpty() -> "Password must not be empty"
+                            pwd.length <= 6 -> "Password must be greater than 6 characters"
+                            else -> null
+                        }
                     }
-                },
-                validatePassword = { pwd ->
-                    when {
-                        pwd.isEmpty() -> "Password must not be empty"
-                        pwd.length <= 6 -> "Password must be greater than 6 characters"
-                        else -> null
-                    }
-                }
-            )
+                )
+            }
+            Box{
+                val ctx = LocalContext.current
+                val scope = rememberCoroutineScope()
+
+                // Collect Flow as state for getting current value
+                val pollCroc by LambDataStore.pollCroc.getVal(ctx).collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
+
+                SettingsSwitch (
+                    value = pollCroc,
+                    label = "Poll Croc",
+                    onValueChange = { newValue -> scope.launch { LambDataStore.pollCroc.setVal(ctx, newValue) } }
+                )
+            }
         }
     }
 }

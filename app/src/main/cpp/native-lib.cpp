@@ -15,14 +15,6 @@ jstring charToJstring(char* str, JNIEnv *env) {
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_chaosthechaotic_lamb_MainActivity_stringFromJNI(
-        JNIEnv* env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
-}
-
-extern "C" JNIEXPORT jstring JNICALL
 Java_com_chaosthechaotic_lamb_CrocPollFgServ_recvCroc(
         JNIEnv* env,
         jobject /* this */,

@@ -45,6 +45,7 @@ interface LambUIElements {
             Icon(
                 imageVector = Icons.Filled.ArrowCircleLeft,
                 contentDescription = "Back to previous",
+                tint = Color.White,
             )
         }
     }

@@ -65,7 +65,7 @@ class CrocPollFgServ : Service() {
     private fun pollCroc() {
         try {
             val stored = lambSS.decryptPwd()
-            if (stored != null) {
+            if (stored != null && stored.isNotEmpty()) {
                 val res = recvCroc(stored)
                 Log.d("CrocPoller", "Result with password: $stored: $res")
             } else {

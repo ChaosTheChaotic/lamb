@@ -54,7 +54,8 @@ class LambSS(context: Context) {
     }
 
     fun decryptPwd(): String? {
-        val comb = Base64.decode(shprfs.getString(EKEY, null), Base64.DEFAULT) ?: return null
+        val epwd = shprfs.getString(EKEY, null) ?: return null
+        val comb = Base64.decode(epwd, Base64.DEFAULT) ?: return null
         val iv = comb.copyOfRange(0, 12) // GCM IV len is 12 bytes
         val enc = comb.copyOfRange(12, comb.size)
 

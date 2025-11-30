@@ -73,7 +73,7 @@ interface LambScreens : LambUIElements {
                     label = "Croc password (must match password set on computer)",
                     onValueChange = { newPass ->
                         pwd = newPass
-                        if (newPass.length > 6) {
+                        if (newPass.isNotEmpty() && newPass.length > 6) {
                             lambSS.encryptStore(newPass)
                         }
                     },

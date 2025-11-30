@@ -35,6 +35,7 @@ interface LambUIElements {
             Icon(
                 imageVector = Icons.Default.Settings,
                 contentDescription = "Settings menu",
+                tint = Color.White,
             )
         }
     }

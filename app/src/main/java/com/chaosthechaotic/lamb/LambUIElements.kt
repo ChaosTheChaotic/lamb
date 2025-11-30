@@ -2,6 +2,7 @@ package com.chaosthechaotic.lamb
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -25,6 +26,16 @@ interface LambUIElements {
             Icon(
                 imageVector = Icons.Default.Settings,
                 contentDescription = "Settings menu",
+            )
+        }
+    }
+
+    @Composable
+    fun BackButton(onClickAction: () -> Unit) {
+        IconButton(onClick = onClickAction) {
+            Icon(
+                imageVector = Icons.Filled.ArrowCircleLeft,
+                contentDescription = "Back to previous",
             )
         }
     }

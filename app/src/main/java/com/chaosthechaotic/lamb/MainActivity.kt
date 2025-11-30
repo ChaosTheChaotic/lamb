@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.PermissionChecker
 import androidx.activity.compose.setContent
 
-class MainActivity : AppCompatActivity(), LambScreen {
+class MainActivity : AppCompatActivity(), LambScreens {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +22,8 @@ class MainActivity : AppCompatActivity(), LambScreen {
         val intent = Intent(this, CrocPollFgServ::class.java)
         startForegroundService(intent)
 
-        // Example of a call to a native method
         setContent {
-            HomeScreen()
+            AppNav()
         }
     }
 

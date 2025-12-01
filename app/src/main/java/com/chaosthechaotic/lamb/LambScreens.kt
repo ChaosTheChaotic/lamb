@@ -26,7 +26,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 
-interface LambScreens : LambUIElements {
+class LambScreens {
+    val UIElements = LambUIElements()
     @Composable
     fun AppNav() {
         val navController = rememberNavController()
@@ -54,9 +55,9 @@ interface LambScreens : LambUIElements {
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Top,
         ) {
-            SettingsButton {navCont.navigate("settings_screen") }
+            UIElements.SettingsButton {navCont.navigate("settings_screen") }
 
-            GenericTextButton(
+            UIElements.GenericTextButton(
                 label = "Poll Croc Now",
                 onClickAction = {
                     CrocPollFgServ().pollCroc()
@@ -90,10 +91,10 @@ interface LambScreens : LambUIElements {
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Top,
         ) {
-            BackButton { navCont.popBackStack() }
+            UIElements.BackButton { navCont.popBackStack() }
 
             Box {
-                PasswordInput(
+                UIElements.PasswordInput(
                     value = pwd,
                     label = "Croc password (must match computer)",
                     onValueChange = { newPass ->
@@ -118,7 +119,7 @@ interface LambScreens : LambUIElements {
                 // Collect Flow as state for getting current value
                 val pollCroc by LambDataStore.pollCroc.getVal(ctx).collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
 
-                SettingsSwitch (
+                UIElements.SettingsSwitch (
                     value = pollCroc,
                     label = "Poll Croc",
                         onValueChange = { newValue -> scope.launch {

@@ -34,7 +34,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
-interface LambUIElements {
+class LambUIElements {
     @Composable
     fun SettingsButton(onClickAction: () -> Unit) {
         IconButton(onClick = onClickAction) {

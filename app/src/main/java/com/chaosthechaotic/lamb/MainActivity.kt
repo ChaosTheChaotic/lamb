@@ -9,7 +9,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.PermissionChecker
 import androidx.activity.compose.setContent
 
-class MainActivity : AppCompatActivity(), LambScreens {
+class MainActivity : AppCompatActivity() {
+
+    val screens = LambScreens()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity(), LambScreens {
         }
 
         setContent {
-            AppNav()
+            screens.AppNav()
         }
     }
 

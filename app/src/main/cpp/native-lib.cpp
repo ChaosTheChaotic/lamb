@@ -9,7 +9,7 @@ char* jstrToChar(jstring str, JNIEnv* env) {
     return rtstr;
 }
 
-jstring charToJstring(char* str, JNIEnv *env) {
+jstring charToJstring(const char* str, JNIEnv *env) {
     std::string s = str;
     return env->NewStringUTF(s.c_str());
 }

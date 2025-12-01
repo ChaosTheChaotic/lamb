@@ -41,23 +41,20 @@ interface LambScreens : LambUIElements {
             }
         }
     }
-
     @Composable
     fun HomeScreen(navCont: NavController) {
         val ctx = LocalContext.current
-        val lambSS = remember { LambSS(ctx) }
-        var storedPwd by remember { mutableStateOf<String?>(null) }
+        val lambSS = remember {LambSS(ctx) }
+        var storedPwd by remember {mutableStateOf<String?>(null) }
 
         LaunchedEffect(Unit) {
             storedPwd = lambSS.decryptPwd()
         }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Top,
         ) {
-            SettingsButton { navCont.navigate("settings_screen") }
+            SettingsButton {navCont.navigate("settings_screen") }
 
             GenericTextButton(
                 label = "Poll Croc Now",
@@ -90,9 +87,7 @@ interface LambScreens : LambUIElements {
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Top,
         ) {
             BackButton { navCont.popBackStack() }
@@ -116,19 +111,17 @@ interface LambScreens : LambUIElements {
                     }
                 )
             }
-            Box {
+            Box{
                 val ctx = LocalContext.current
                 val scope = rememberCoroutineScope()
 
                 // Collect Flow as state for getting current value
-                val pollCroc by LambDataStore.pollCroc.getVal(ctx)
-                    .collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
+                val pollCroc by LambDataStore.pollCroc.getVal(ctx).collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
 
-                SettingsSwitch(
+                SettingsSwitch (
                     value = pollCroc,
                     label = "Poll Croc",
-                    onValueChange = { newValue ->
-                        scope.launch {
+                        onValueChange = { newValue -> scope.launch {
                             LambDataStore.pollCroc.setVal(ctx, newValue)
 
                             val intent = Intent(ctx, CrocPollFgServ::class.java)

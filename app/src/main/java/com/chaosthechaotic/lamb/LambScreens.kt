@@ -41,7 +41,7 @@ interface LambScreens : LambUIElements {
     }
     @Composable
     fun HomeScreen(navCont: NavController) {
-        Box(
+        Column(
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
             SettingsButton {navCont.navigate("settings_screen") }

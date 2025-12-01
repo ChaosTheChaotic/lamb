@@ -86,7 +86,7 @@ class CrocPollFgServ : Service() {
     external fun recvCroc(code: String): String
     external fun sndCroc(msg: String, code: String): String
 
-    private fun pollCroc() {
+    fun pollCroc() {
         try {
             val stored = lambSS.decryptPwd()
             if (stored != null && stored.isNotEmpty()) {

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -41,6 +44,13 @@ interface LambScreens : LambUIElements {
     }
     @Composable
     fun HomeScreen(navCont: NavController) {
+        val ctx = LocalContext.current
+        val lambSS = remember {LambSS(ctx) }
+        var storedPwd by remember {mutableStateOf<String?>(null) }
+
+        LaunchedEffect(Unit) {
+            storedPwd = lambSS.decryptPwd()
+        }
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Top,
@@ -51,8 +61,17 @@ interface LambScreens : LambUIElements {
                 label = "Poll Croc Now",
                 onClickAction = {
                     CrocPollFgServ().pollCroc()
-                }
+                },
+                enabled = storedPwd != null
             )
+
+            if (storedPwd == null) {
+                Text(
+                    text = "Please set the password correctly to poll croc",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
         }
     }
 

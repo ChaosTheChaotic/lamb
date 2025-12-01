@@ -58,8 +58,8 @@ interface LambUIElements {
     }
 
     @Composable
-    fun GenericTextButton(label: String, onClickAction: () -> Unit) {
-        FilledTonalButton(onClick = onClickAction) {
+    fun GenericTextButton(label: String, onClickAction: () -> Unit, enabled: Boolean = true) {
+        FilledTonalButton(enabled = enabled, onClick = onClickAction) {
             Text(label)
         }
     }

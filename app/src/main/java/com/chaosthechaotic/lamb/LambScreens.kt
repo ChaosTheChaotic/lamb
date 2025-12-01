@@ -17,14 +17,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 
 interface LambScreens : LambUIElements {
@@ -42,20 +41,23 @@ interface LambScreens : LambUIElements {
             }
         }
     }
+
     @Composable
     fun HomeScreen(navCont: NavController) {
         val ctx = LocalContext.current
-        val lambSS = remember {LambSS(ctx) }
-        var storedPwd by remember {mutableStateOf<String?>(null) }
+        val lambSS = remember { LambSS(ctx) }
+        var storedPwd by remember { mutableStateOf<String?>(null) }
 
         LaunchedEffect(Unit) {
             storedPwd = lambSS.decryptPwd()
         }
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
             verticalArrangement = Arrangement.Top,
         ) {
-            SettingsButton {navCont.navigate("settings_screen") }
+            SettingsButton { navCont.navigate("settings_screen") }
 
             GenericTextButton(
                 label = "Poll Croc Now",
@@ -88,7 +90,9 @@ interface LambScreens : LambUIElements {
         }
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
             verticalArrangement = Arrangement.Top,
         ) {
             BackButton { navCont.popBackStack() }
@@ -112,17 +116,19 @@ interface LambScreens : LambUIElements {
                     }
                 )
             }
-            Box{
+            Box {
                 val ctx = LocalContext.current
                 val scope = rememberCoroutineScope()
 
                 // Collect Flow as state for getting current value
-                val pollCroc by LambDataStore.pollCroc.getVal(ctx).collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
+                val pollCroc by LambDataStore.pollCroc.getVal(ctx)
+                    .collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
 
-                SettingsSwitch (
+                SettingsSwitch(
                     value = pollCroc,
                     label = "Poll Croc",
-                        onValueChange = { newValue -> scope.launch {
+                    onValueChange = { newValue ->
+                        scope.launch {
                             LambDataStore.pollCroc.setVal(ctx, newValue)
 
                             val intent = Intent(ctx, CrocPollFgServ::class.java)

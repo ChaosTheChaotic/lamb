@@ -42,9 +42,17 @@ interface LambScreens : LambUIElements {
     @Composable
     fun HomeScreen(navCont: NavController) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp)
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.Top,
         ) {
             SettingsButton {navCont.navigate("settings_screen") }
+
+            GenericTextButton(
+                label = "Poll Croc Now",
+                onClickAction = {
+                    CrocPollFgServ().pollCroc()
+                }
+            )
         }
     }
 

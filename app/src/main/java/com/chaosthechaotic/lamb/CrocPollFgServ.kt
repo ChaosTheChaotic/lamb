@@ -3,6 +3,7 @@ package com.chaosthechaotic.lamb
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Handler
@@ -86,12 +87,28 @@ class CrocPollFgServ : Service() {
     external fun recvCroc(code: String): String
     external fun sndCroc(msg: String, code: String): String
 
-    fun pollCroc() {
+    private fun pollCroc() {
         try {
             val stored = lambSS.decryptPwd()
+
             if (stored != null && stored.isNotEmpty()) {
                 val res = recvCroc(stored)
                 Log.d("CrocPoller", "Result with password: $stored: $res")
+            } else {
+                Log.d("CrocPoller", "No password found")
+            }
+        } catch (e: Exception) {
+            Log.e("CrocPoller", "Error polling: ${e.message}", e)
+        }
+    }
+
+    fun pollOnce(context: Context, password: String? = null) {
+        try {
+            val stored = password ?: LambSS(context).decryptPwd()
+
+            if (stored != null && stored.isNotEmpty()) {
+                val res = recvCroc(stored)
+                Log.d("CrocPoller", "One time poll result with password: $stored: $res")
             } else {
                 Log.d("CrocPoller", "No password found")
             }

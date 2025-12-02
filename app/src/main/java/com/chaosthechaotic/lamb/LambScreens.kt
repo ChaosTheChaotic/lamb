@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -46,12 +47,11 @@ class LambScreens {
     @Composable
     fun HomeScreen(navCont: NavController) {
         val ctx = LocalContext.current
-        val lambSS = remember {LambSS(ctx) }
-        var storedPwd by remember {mutableStateOf<String?>(null) }
-
-        LaunchedEffect(Unit) {
-            storedPwd = lambSS.decryptPwd()
+        val storedPwd by produceState<String?>(initialValue = null) {
+            value = LambSS(ctx).decryptPwd()
         }
+        val scope = rememberCoroutineScope()
+
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Top,
@@ -61,7 +61,9 @@ class LambScreens {
             UIElements.GenericTextButton(
                 label = "Poll Croc Now",
                 onClickAction = {
-                    CrocPollFgServ().pollCroc()
+                    scope.launch {
+                        CrocPollFgServ().pollOnce(ctx, storedPwd)
+                    }
                 },
                 enabled = storedPwd != null,
             )

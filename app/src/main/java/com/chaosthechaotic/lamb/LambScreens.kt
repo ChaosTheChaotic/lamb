@@ -62,7 +62,7 @@ class LambScreens {
                 onClickAction = {
                     CrocPollFgServ().pollCroc()
                 },
-                enabled = storedPwd != null
+                enabled = storedPwd != null,
             )
 
             if (storedPwd == null) {

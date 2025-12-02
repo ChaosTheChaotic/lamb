@@ -122,7 +122,7 @@ class LambUIElements {
     }
 
     @Composable
-    fun SettingsSwitch(value: Boolean, label: String, onValueChange: (Boolean) -> Unit) {
+    fun SettingsSwitch(value: Boolean, label: String, enabled: Boolean = true, onValueChange: (Boolean) -> Unit) {
         Row {
             Text(
                 text = label,
@@ -131,7 +131,8 @@ class LambUIElements {
             )
             Switch(
                 checked = value,
-                onCheckedChange = { newState -> onValueChange(newState) }
+                onCheckedChange = { newState -> onValueChange(newState) },
+                enabled = enabled,
             )
         }
     }

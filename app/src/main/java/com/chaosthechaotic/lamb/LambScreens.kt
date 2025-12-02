@@ -122,7 +122,9 @@ class LambScreens {
                 UIElements.SettingsSwitch (
                     value = pollCroc,
                     label = "Poll Croc",
-                        onValueChange = { newValue -> scope.launch {
+                    enabled = storedPwd != null,
+                    onValueChange = { newValue ->
+                        scope.launch {
                             LambDataStore.pollCroc.setVal(ctx, newValue)
 
                             val intent = Intent(ctx, CrocPollFgServ::class.java)
@@ -134,6 +136,13 @@ class LambScreens {
                         }
                     }
                 )
+                if (storedPwd == null) {
+                    Text(
+                        text = "Please enter a valid password to ues this",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         }
     }

@@ -13,7 +13,7 @@ activityCompose = "1.8.0"
 materialIconsExtended = "1.7.8"
 navigationCompose = "2.6.0-alpha08"
 datastorePreferences = "1.3.0-alpha01"
-lifecycleRuntimeCompose = "2.6.1"
+lifecycleRuntimeCompose = "2.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.17.0" }

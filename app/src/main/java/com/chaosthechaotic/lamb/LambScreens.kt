@@ -130,6 +130,7 @@ class LambScreens {
                         pwd = newPass
                         if (newPass.isNotEmpty() && newPass.length > 6) {
                             lambSS.encryptStore(newPass)
+                            storedPwd = newPass
                         }
                     },
                     validatePassword = { pwd ->

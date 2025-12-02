@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 
 class LambScreens {
+    @Suppress("PropertyName")
     val UIElements = LambUIElements()
     @Composable
     fun AppNav() {
@@ -142,7 +143,7 @@ class LambScreens {
                 )
                 if (storedPwd == null) {
                     Text(
-                        text = "Please enter a valid password to ues this",
+                        text = "Please enter a valid password to use this",
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodySmall,
                     )

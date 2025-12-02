@@ -120,7 +120,7 @@ class LambScreens {
                 val pollCroc by LambDataStore.pollCroc.getVal(ctx).collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
 
                 UIElements.SettingsSwitch (
-                    value = pollCroc,
+                    value = if (storedPwd == null) false else true,
                     label = "Poll Croc",
                     enabled = storedPwd != null,
                     onValueChange = { newValue ->

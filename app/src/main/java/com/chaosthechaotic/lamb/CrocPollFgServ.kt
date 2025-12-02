@@ -57,7 +57,7 @@ class CrocPollFgServ : Service() {
 
         startForeground(1, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE)
         handler.post(pollRunnable)
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

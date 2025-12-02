@@ -85,6 +85,10 @@ class LambScreens {
         LaunchedEffect(Unit) {
             storedPwd = lambSS.decryptPwd()
             pwd = storedPwd ?: ""
+
+            if (storedPwd == null) {
+                LambDataStore.pollCroc.setValAutoCo(ctx, false)
+            }
         }
 
         Column(
@@ -120,7 +124,7 @@ class LambScreens {
                 val pollCroc by LambDataStore.pollCroc.getVal(ctx).collectAsStateWithLifecycle(initialValue = LambDataStore.pollCroc.default)
 
                 UIElements.SettingsSwitch (
-                    value = if (storedPwd == null) false else true,
+                    value = if (storedPwd == null) false else pollCroc,
                     label = "Poll Croc",
                     enabled = storedPwd != null,
                     onValueChange = { newValue ->

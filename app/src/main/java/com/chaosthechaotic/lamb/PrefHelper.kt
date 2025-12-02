@@ -1,6 +1,7 @@
 package com.chaosthechaotic.lamb
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,6 +34,12 @@ class PrefHelper(private val ctx: Context) {
         jobs.values.forEach { it.cancel() }
         jobs.clear()
     }
+
+    fun <T> setValAutoCo(prefItem: LambDataStore.PrefItem<T>, value: T) {
+        scope.launch {
+            prefItem.setVal(ctx, value)
+        }
+    }
 }
 
 fun <T> LambDataStore.PrefItem<T>.getValBlocking(context: Context): T {
@@ -41,4 +48,8 @@ fun <T> LambDataStore.PrefItem<T>.getValBlocking(context: Context): T {
 
 fun <T> LambDataStore.PrefItem<T>.getValAsync(context: Context, callback: (T) -> Unit) {
     PrefHelper(context).getValueAsync(this, callback)
+}
+
+fun <T> LambDataStore.PrefItem<T>.setValAutoCo(context: Context, value: T) {
+    PrefHelper(context).setValAutoCo(this, value)
 }

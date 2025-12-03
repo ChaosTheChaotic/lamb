@@ -13,14 +13,22 @@ jstring charToJstring(const char* str, JNIEnv *env) {
     std::string s = str;
     return env->NewStringUTF(s.c_str());
 }
-
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_chaosthechaotic_lamb_CrocPollFgServ_recvCroc(
         JNIEnv* env,
         jobject /* this */,
-        jstring code
-        ) {
-    return charToJstring(RecvText(jstrToChar(code, env)), env);
+        jstring code) {
+    const char* codeStr = env->GetStringUTFChars(code, nullptr);
+    char* result = RecvText(const_cast<char*>(codeStr));
+    env->ReleaseStringUTFChars(code, codeStr);
+
+    if (result == nullptr) {
+        return env->NewStringUTF("");
+    }
+
+    jstring javaResult = env->NewStringUTF(result);
+    free(result);
+    return javaResult;
 }
 
 extern "C" JNIEXPORT jstring JNICALL
@@ -29,5 +37,19 @@ Java_com_chaosthechaotic_lamb_CrocPollFgServ_sndCroc(
         jobject /* this */,
         jstring msg,
         jstring code) {
-    return charToJstring(SendText(jstrToChar(msg, env), jstrToChar(code, env)), env);
+    const char* msgStr = env->GetStringUTFChars(msg, nullptr);
+    const char* codeStr = env->GetStringUTFChars(code, nullptr);
+
+    char* result = SendText(const_cast<char*>(msgStr), const_cast<char*>(codeStr));
+
+    env->ReleaseStringUTFChars(msg, msgStr);
+    env->ReleaseStringUTFChars(code, codeStr);
+
+    if (result == nullptr) {
+        return env->NewStringUTF("");
+    }
+
+    jstring javaResult = env->NewStringUTF(result);
+    free(result);
+    return javaResult;
 }

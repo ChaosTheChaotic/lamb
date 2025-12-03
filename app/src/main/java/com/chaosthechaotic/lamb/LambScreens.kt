@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LambScreens {
@@ -60,7 +61,7 @@ class LambScreens {
         val storedPwd by produceState<String?>(initialValue = null) {
             value = LambSS(ctx).decryptPwd()
         }
-        val scope = rememberCoroutineScope()
+        val scope = rememberCoroutineScope { Dispatchers.IO }
 
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),

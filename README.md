@@ -1,0 +1,1 @@
+This works up until the point of getting info across. For some reason the library refuses to receive info properly. I actually can't figure this out and I don't want to vendor the entirety of croc and make it work on android. For now, I will try other methods of making this work
